@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENIUSBAR CRUD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./index.html">GENIUSBAR CRUD</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" href="/index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/index.html">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/pedidos.html">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/clientes.html">Clientes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container px-4 my-4">
+
+        <!-- Formulario de producto -->
+         <div class="container-fluid text-bg-dark text-center border-dark-subtle border-5">
+            <span>Pedidos</span>
+         </div>
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark-subtle text-dark">
+                <h5 class="mb-0">Nuevo Pedido</h5>
+            </div>
+            <div class="card-body w-auto">
+                <form id="form-pedidos">
+                    <input type="hidden" id="idPedido">
+                    <div class="mb-3">
+                        <label for="cliente_id" class="form-label">Identificador Cliente</label>
+                        <input type="number" class="form-control" id="cliente_id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Direccion Envio</label>
+                        <input type="text" class="form-control" id="direccion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado del Pedido</label>
+                        <input type="text" class="form-control" id="estado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Detalles del Pedido</label>
+                        <table class="table table-bordered" id="tabla-detalles">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID Producto</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th><button type="button" class="btn btn-success btn-sm" onclick="agregarDetalle()">+</button></th>
+                            </tr>
+                            </thead>
+                            <tbody id="body-detalles"></tbody>
+                    </table>
+                    </div>
+                    <!-- muestra los productos -->
+                    <div class="mb-3">
+                        <label class="form-label">Productos en el Sistema</label>
+                        <button type="button" class="btn btn-sm btn-success mb-1" onclick="toggleMuestrario()"><i class="bi bi-save2"></i></button>
+                        <div id="muestrario-productos">
+                            <table class="table table-bordered" id="tabla-mostrarproductos">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>ID Producto</th>
+                                    <th>Producto</th>
+                                    <th>Color</th>
+                                    <th>Condicion</th>
+                                </tr>
+                                </thead>
+                                <tbody id="body-mostrardetalleproductos"></tbody>
+                        </table>
+                        </div>
+                    </div>
+
+                    <!-- Botones de accion -->
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success me-2">
+                            <i class="bi bi-save2"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelar">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- !Busquedas -->
+        <div class="card w-auto shadow-sm d-flex">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Filtros</h5>
+            </div>
+            <div class="card-body p-2 d-block">
+                <input type="search" id="search-estado" class="form-control mb-0 p-2" placeholder="Buscar pedido por estado de envio">
+                <input type="search" id="search-clienteid" class="form-control mb-0 p-2" placeholder="Buscar pedido por identificador(id) del cliente">
+                <input type="date" id="search-fecha" class="form-control mb-0 p-2" placeholder="Buscar pedido por fecha">
+            </div>
+        </div>
+
+        <!-- Tabla de productos -->
+        <div class="card shadow-sm mt-2">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Listado de Pedidos</h5>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-striped table-hover table-bordered align-middle text-nowrap">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID Pedido</th>
+                            <th>ID Cliente</th>
+                            <th>Cliente</th>
+                            <th>Direccion</th>
+                            <th>Estado</th>
+                            <th>Fecha Creado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pedidos"></tbody>
+                </table>
+                <div id="detallePedido" class="mt-4 d-none"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./Appedidos.js"></script>
+</body>
+</html>
