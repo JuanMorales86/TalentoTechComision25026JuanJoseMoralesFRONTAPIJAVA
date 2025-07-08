@@ -9,11 +9,14 @@ document.getElementById('form-producto').addEventListener("submit", guardarProdu
 
 //Cancelar el Form
 document.getElementById('cancelar').addEventListener('click', () => {
-    //Limpiar el form
-    document.getElementById('form-producto').reset();
-    //borrar el id del producto oculto
-    document.getElementById('idProducto').value = "";
+    limpiarForm();
 });
+
+function limpiarForm(){
+    document.getElementById('form-producto').reset();
+    document.getElementById('idProducto').value = "";
+    document.getElementById('idInterno').value = "";
+}
 
 //Listar Productos
 function listarProductos() {
@@ -60,14 +63,15 @@ function mostrarProductos(producto) {
             categoriaProducto: document.getElementById('categoria').value,
             colorProducto: document.getElementById('color').value,
             condicionProducto: document.getElementById('condicion').value,
-            observacionesProducto: document.getElementById('observaciones').value
+            observacionesProducto: document.getElementById('observaciones').value,
+            idInterno: document.getElementById('idInterno').value
         };
 
         const metodo = id ? axios.put(`${API_URLP}/${id}`, producto) : axios.post(API_URLP, producto);
 
         metodo.then(() => {
-            document.getElementById('form-producto').reset();
-            document.getElementById('idProducto').value = "";
+            alert('Producto guardado con exito');
+            limpiarForm();
             listarProductos();
         }).catch(err => console.error('Error al guardar el producto', err));
     }
@@ -77,6 +81,8 @@ function mostrarProductos(producto) {
         axios.get(`${API_URLP}/${id}`)
         .then(res => {
             const p = res.data;
+            document.getElementById('idProducto').value = p.id;
+            document.getElementById('idInterno').value = p.idInterno;
             document.getElementById('nombre').value = p.nombreProducto;
             document.getElementById('descripcion').value = p.descripcionProducto;
             document.getElementById('precio').value = p.precioProducto;
