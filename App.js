@@ -118,6 +118,80 @@ function buscarPorNombreLike(nombreLike){
     .catch(error => console.log('Error al buscar productos', error));
 }
 
+function buscarPorCondicion(condicionProducto){
+    const condicion = condicionProducto.trim();
+    if(condicion === ''){
+        listarProductos();
+        return;
+    }
+    axios.get(`${API_URLP}/busqueda/condicion/${condicion}`).then(response => {
+        mostrarProductos(response.data);
+    })
+    .catch(error => console.log('Error al buscar productos', error));
+}
+
+function buscarPorCategoria(categoriaProducto){
+    const categoria = categoriaProducto.trim();
+    if(categoria === ''){
+        listarProductos();
+        return;
+    }
+    axios.get(`${API_URLP}/busqueda/categoria/${categoria}`).then(response => {
+        mostrarProductos(response.data);
+    })
+    .catch(error => console.log('Error al buscar productos', error));
+}
+
+function buscarPorColor(colorProducto){
+    const color = colorProducto.trim();
+    if(color === ''){
+        listarProductos();
+        return;
+    }
+    axios.get(`${API_URLP}/busqueda/color/${color}`).then(response => {
+        mostrarProductos(response.data);
+    })
+    .catch(error => console.log('Error al buscar productos', error));
+}
+
+function buscarPorIdInterno(idInterno) {
+    const id = idInterno.trim();
+    if (id === '') {
+        listarProductos();
+        return;
+    }
+
+    axios.get(`${API_URLP}/busqueda/idinterno/${id}`)
+        .then(response => {
+           
+            if (response.data) {
+                
+                mostrarProductos([response.data]);
+            } else {
+                
+                mostrarProductos([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error al buscar productos por ID Interno:', error);
+            mostrarProductos([]); // Clear the table on error
+        });
+}
+
+function buscarPorPrecioMayorA(precioProducto){
+    const precioa = precioProducto.trim();
+    if(precioa === ''){
+        listarProductos();
+        return;
+    }
+    axios.get(`${API_URLP}/busqueda/precio/${precioa}`).then(response => {
+        mostrarProductos(response.data);
+    })
+    .catch(error => console.log('Error al buscar productos', error));
+}
+
+
+
     // Debounce para evitar llamadas repetidas mientras se escribe
     let timer;
     document.getElementById("search").addEventListener("input", function () {
@@ -128,12 +202,61 @@ function buscarPorNombreLike(nombreLike){
         }, 400);
     });
 
-       let timer2;
     document.getElementById("search-like").addEventListener("input", function () {
         const texto = this.value.trim();
         clearTimeout(timer);
+        timer = "";
         timer = setTimeout(() => {
             buscarPorNombreLike(texto);
         }, 400);
     });
+
+    document.getElementById("search-condicion").addEventListener("input", function () {
+        const condicion = this.value.trim();
+        clearTimeout(timer);
+        timer = "";
+        timer = setTimeout(() => {
+            buscarPorCondicion(condicion);
+        }, 400);
+    });
+
+    document.getElementById("search-categoria").addEventListener("input", function () {
+        const categoria = this.value.trim();
+        clearTimeout(timer);
+        timer = "";
+        timer = setTimeout(() => {
+            buscarPorCategoria(categoria);
+        }, 400);
+    });
+
+    document.getElementById("search-color").addEventListener("input", function () {
+        const color = this.value.trim();
+        clearTimeout(timer);
+        timer = "";
+        timer = setTimeout(() => {
+            buscarPorColor(color);
+        }, 400);
+    });
+
+    document.getElementById("search-idInterno").addEventListener("input", function () {
+        const idInterno = this.value.trim();
+        clearTimeout(timer);
+        timer = "";
+        timer = setTimeout(() => {
+            buscarPorIdInterno(idInterno);
+        }, 400);
+    });
+
+    document.getElementById("search-precio").addEventListener("input", function () {
+        const precio = this.value.trim();
+        clearTimeout(timer);
+        timer = "";
+        timer = setTimeout(() => {
+            buscarPorPrecioMayorA(precio);
+        }, 400);
+    });
+
+
+
+
 
